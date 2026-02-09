@@ -1,145 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Happy Valentines, Aine 💖</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Valentines, Aine 💖</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.6.0/confetti.browser.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.6.0/confetti.browser.min.js"></script>
 
-    <style>
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+<style>
+    body { overflow: hidden; }
 
-        .fade-in {
-            animation: fadeIn 1.5s ease-out forwards;
-        }
+    @keyframes heartBeat {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.25); }
+        100% { transform: scale(1); }
+    }
 
-        @keyframes heartBeat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.25); }
-            100% { transform: scale(1); }
-        }
+    .heart-beat {
+        animation: heartBeat 0.9s infinite;
+    }
 
-        .heart-beat {
-            animation: heartBeat 0.9s infinite;
-        }
-    </style>
+    @keyframes floatUp {
+        0% { transform: translateY(100vh) scale(0.6); opacity: 0; }
+        10% { opacity: 1; }
+        100% { transform: translateY(-120vh) scale(1); opacity: 0; }
+    }
 
-    <script>
-        function isMobileDevice() {
-            return (typeof window.orientation !== "undefined") ||
-                   (navigator.userAgent.indexOf('IEMobile') !== -1);
-        }
-
-        window.onload = function () {
-            if (isMobileDevice()) {
-                document.getElementById('invitation-content').style.display = 'none';
-                document.getElementById('mobile-warning').style.display = 'block';
-            } else {
-                document.getElementById('invitation-content').style.display = 'block';
-                document.getElementById('mobile-warning').style.display = 'none';
-            }
-        }
-
-        function moveNoButton() {
-            const noButton = document.getElementById("no-btn");
-            const x = (Math.random() * 200) - 100;
-            const y = (Math.random() * 200) - 100;
-            noButton.style.transform = `translate(${x}px, ${y}px)`;
-        }
-
-        function celebrateYes() {
-            document.getElementById('main-content').innerHTML = `
-                <h1 class="text-4xl font-bold text-pink-600 mb-4">
-                    Happy Valentine’s Day 💕
-                </h1>
-                <p class="text-gray-700 text-lg mb-6">
-                    Yeyy i knew you would say YES! 💖
-                    <span class="heart-beat inline-block">❤️</span>
-                </p>
-            `;
-
-            const duration = 8 * 1000;
-            const animationEnd = Date.now() + duration;
-
-            function randomInRange(min, max) {
-                return Math.random() * (max - min) + min;
-            }
-
-            // Big love burst 💘
-            confetti({
-                particleCount: 220,
-                spread: 100,
-                origin: { y: 0.6 },
-                colors: ['#ec4899', '#f43f5e', '#ffffff'],
-                shapes: ['circle'],
-                gravity: 1.1
-            });
-
-            (function frame() {
-                const timeLeft = animationEnd - Date.now();
-                if (timeLeft <= 0) return;
-
-                // Floating hearts effect
-                confetti({
-                    particleCount: 6,
-                    angle: 90,
-                    spread: 360,
-                    origin: { x: Math.random(), y: -0.1 },
-                    colors: ['#ec4899', '#f43f5e'],
-                    shapes: ['circle'],
-                    gravity: randomInRange(0.3, 0.6),
-                    scalar: randomInRange(0.5, 0.9),
-                    ticks: 300
-                });
-
-                requestAnimationFrame(frame);
-            })();
-        }
-    </script>
+    .photo-balloon {
+        position: fixed;
+        bottom: -150px;
+        border-radius: 9999px;
+        animation-name: floatUp;
+        animation-timing-function: linear;
+        pointer-events: none;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    }
+</style>
 </head>
-
 <body class="bg-gradient-to-r from-pink-600 to-red-500 flex items-center justify-center min-h-screen p-4">
 
-    <!-- Mobile Warning -->
-    <div id="mobile-warning"
-        class="bg-white shadow-lg rounded-lg p-6 max-w-md w-full text-center fade-in"
-        style="display: none;">
-        <p class="text-gray-700">
-            Please open this on a computer for the full Valentine’s surprise 💘
-        </p>
-    </div>
+<div id="invitation-content" class="bg-white shadow-xl rounded-lg p-8 max-w-md w-full text-center relative z-10">
 
-    <!-- Main Content -->
-    <div id="invitation-content"
-        class="bg-white shadow-xl rounded-lg p-8 max-w-md w-full text-center fade-in">
-
-        <div id="main-content">
-            <h1 class="text-4xl font-bold text-pink-600 mb-4">
-                Hey Aine 💖
-            </h1>
-
-            <p class="text-gray-700 text-lg mb-6">
-                Would you like to go out with me on Feb 14? 💌✨
-            </p>
-
-            <div class="flex justify-center space-x-4">
-                <button onclick="celebrateYes()"
-                    class="bg-pink-600 text-white px-6 py-2 rounded-lg hover:bg-pink-700 transition">
-                    Yes 💝
-                </button>
-
-                <button id="no-btn"
-                    onmouseover="moveNoButton()"
-                    class="bg-red-500 text-white px-6 py-2 rounded-lg transition">
-                    No 💔
-                </button>
-            </div>
+    <div id="main-content">
+        <h1 class="text-4xl font-bold text-pink-600 mb-4">Hey Aine 💖</h1>
+        <p class="text-gray-700 text-lg mb-6">Would you like to go out with me on Feb 14? 💌✨</p>
+        <div class="flex justify-center space-x-4">
+            <button onclick="celebrateYes()" class="bg-pink-600 text-white px-6 py-2 rounded-lg hover:bg-pink-700">
+                Yes 💝
+            </button>
+            <button id="no-btn" onmouseover="moveNoButton()" class="bg-red-500 text-white px-6 py-2 rounded-lg">
+                No 💔
+            </button>
         </div>
     </div>
+</div>
+
+<script>
+function moveNoButton() {
+    const btn = document.getElementById("no-btn");
+    btn.style.transform = `translate(${Math.random()*200-100}px, ${Math.random()*200-100}px)`;
+}
+
+function celebrateYes() {
+    const main = document.getElementById('main-content');
+    main.innerHTML = `
+        <h1 class="text-4xl font-bold text-pink-600 mb-4">Happy Valentine’s Day 💕</h1>
+        <p class="text-gray-700 text-lg mb-6">I knew you’d say YES 💖 <span class="heart-beat">❤️</span></p>
+    `;
+
+    // 🚀 SPAWN MANY PHOTO BALLOONS IMMEDIATELY
+    for (let i = 0; i < 20; i++) createBalloon();
+
+    // Continuous spawn every 350ms
+    window.balloonInterval = setInterval(createBalloon, 350);
+
+    startConfetti();
+}
+
+function createBalloon() {
+    const img = document.createElement("img");
+    img.src = "aine.jpg";
+    img.className = "photo-balloon";
+
+    const size = Math.random() * 80 + 80; // 80-160px
+    img.style.width = size + "px";
+    img.style.height = size + "px";
+
+    img.style.left = Math.random() * 100 + "vw";
+    img.style.animationDuration = (Math.random() * 6 + 8) + "s";
+    img.style.animationDelay = "0s"; // NO DELAY!!!
+
+    document.body.appendChild(img);
+    setTimeout(() => img.remove(), 16000);
+}
+
+function startConfetti() {
+    const duration = 8000;
+    const end = Date.now() + duration;
+
+    confetti({ particleCount: 250, spread: 110, origin: { y: 0.6 }, colors: ['#ec4899','#f43f5e','#ffffff'] });
+
+    (function frame() {
+        if (Date.now() > end) return;
+        confetti({
+            particleCount: 6,
+            spread: 360,
+            origin: { x: Math.random(), y: -0.1 },
+            colors: ['#ec4899','#f43f5e'],
+            gravity: Math.random() * 0.4 + 0.3
+        });
+        requestAnimationFrame(frame);
+    })();
+}
+</script>
 </body>
 </html>
